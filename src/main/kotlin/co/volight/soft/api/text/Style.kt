@@ -70,23 +70,23 @@ class StyleBuilder(var style: Style) {
         return this
     }
 
-    fun hoverEvent(hoverEvent: HoverEvent): StyleBuilder {
+    fun onHover(hoverEvent: HoverEvent): StyleBuilder {
         style = style.withHoverEvent(hoverEvent)
         return this
     }
 
-    fun <T> hoverEvent(action: HoverEvent.Action<T>, obj: T): StyleBuilder {
-        style = style.withHoverEvent(HoverEvent(action, obj))
+    fun <T> onHover(action: HoverEvent.Action<T>, contents: T): StyleBuilder {
+        style = style.withHoverEvent(HoverEvent(action, contents))
         return this
     }
 
-    fun clickEvent(clickEvent: ClickEvent): StyleBuilder {
+    fun onClick(clickEvent: ClickEvent): StyleBuilder {
         style = style.withClickEvent(clickEvent)
         return this
     }
 
-    fun clickEvent(action: ClickEvent.Action, string: String): StyleBuilder {
-        style = style.withClickEvent(ClickEvent(action, string))
+    fun onClick(action: ClickEvent.Action, value: String): StyleBuilder {
+        style = style.withClickEvent(ClickEvent(action, value))
         return this
     }
 
