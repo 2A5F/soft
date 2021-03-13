@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "co.volight.soft.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "ClientSettingsC2SPacketWithLanguage",
+    "LangGetMixin"
+  ],
+  "client": [
+  ],
+  "server": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

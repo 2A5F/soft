@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "soft",
+  "version": "${version}",
+
+  "name": "Soft API",
+  "description": "",
+  "authors": [
+    "Volight"
+  ],
+  "contact": {
+    "homepage": "https://github.com/softapi",
+    "sources": "https://github.com/softapi/soft"
+  },
+
+  "license": "MIT",
+  "icon": "assets/soft/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "co.volight.soft.SoftKt::init"
+    ]
+  },
+  "mixins": [
+    "soft.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.8.7",
+    "fabric": "*",
+    "fabric-language-kotlin": "*",
+    "minecraft": "1.16.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "badges": ["library"]
+    }
+  }
+}
