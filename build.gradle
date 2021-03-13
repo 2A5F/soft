@@ -80,11 +80,29 @@ publishing {
             artifact(sourcesJar) {
                 builtBy remapSourcesJar
             }
+            pom {
+                name = "soft"
+                description = "Soft API"
+                url = "https://github.com/softapi/soft"
+                licenses {
+                    license {
+                        name = "MIT"
+                    }
+                }
+            }
         }
     }
 
     // select the repositories you want to publish to
     repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/softapi/soft")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+            }
+        }
         // uncomment to publish to the local maven
         // mavenLocal()
     }
