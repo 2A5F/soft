@@ -1,8 +1,10 @@
 package co.volight.soft.impl.lang
 
 import co.volight.soft.Soft
+import co.volight.soft.api.lang.LangHandle
 import co.volight.soft.api.lang.LangStr
 import com.google.gson.Gson
+import net.fabricmc.loader.api.FabricLoader
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.PathMatcher
@@ -12,13 +14,33 @@ typealias LangName = String
 typealias ModName = String
 typealias LangTextMap = Map<TextName, LangStr>
 typealias LangMap = Map<LangName, LangTextMap>
-typealias ModLangMap = MutableMap<ModName, LangMap>
+typealias ModLangMap = MutableMap<ModName, LangHandle>
 
-object Lang {
-    const val logName = "[SoftAPI:Lang]"
-    val langs: ModLangMap = mutableMapOf()
+const val logName = "[SoftAPI:Lang]"
 
-    fun loadLangMap(modname: ModName, langDir: Path): LangMap {
+object LangImpl {
+    private val langs: ModLangMap = mutableMapOf()
+
+    fun get(modeName: ModName): LangHandle? {
+        return langs[modeName]
+    }
+
+    fun reg(modeName: ModName, path: String? = null): LangHandle? {
+        val container = FabricLoader.getInstance().getModContainer(modeName).orElseThrow { throw RuntimeException("Mod \"${modeName}\" not loaded") }
+        val langDir = container.getPath(path ?: "assets/${modeName}/lang/")
+        return try {
+            val langMap = loadLangMap(modeName, langDir)
+            val handle = LangHandle(modeName, langMap)
+            langs[modeName] = handle
+            Soft.LOGGER.info("$logName Language files of mod \"${modeName}\" loaded")
+            handle
+        } catch (e: Exception) {
+            Soft.LOGGER.error("$logName Failed to load the language file of mod \"${modeName}\"", e)
+            null
+        }
+    }
+
+    private fun loadLangMap(modname: ModName, langDir: Path): LangMap {
         val jsonFile: PathMatcher = langDir.fileSystem.getPathMatcher("glob:**/*.json")
         return sequence {
             Files.walk(langDir).use { paths ->
@@ -34,7 +56,7 @@ object Lang {
         }.toMap()
     }
 
-    fun loadTextMap(path: Path): LangTextMap {
+    private fun loadTextMap(path: Path): LangTextMap {
         val gson = Gson()
         val strMap = gson.fromJson<Map<String, String>>(Files.newBufferedReader(path), Map::class.java)
         return strMap.mapValues { LangStr.parse(it.value) }

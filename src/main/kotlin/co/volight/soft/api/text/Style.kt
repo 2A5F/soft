@@ -1,54 +1,103 @@
 package co.volight.soft.api.text
 
-import co.volight.cell.Ref
 import net.minecraft.text.ClickEvent
 import net.minecraft.text.HoverEvent
 import net.minecraft.text.Style
 import net.minecraft.text.TextColor
 import net.minecraft.util.Formatting
 
-inline fun styleOf(f: Ref<Style>.() -> Unit): Style {
-    val style = Ref(Style.EMPTY)
+class StyleBuilder(var style: Style) {
+    val BLACK = Formatting.BLACK
+    val DARK_BLUE = Formatting.DARK_BLUE
+    val DARK_GREEN= Formatting.DARK_GREEN
+    val DARK_AQUA= Formatting.DARK_AQUA
+    val DARK_RED= Formatting.DARK_RED
+    val DARK_PURPLE= Formatting.DARK_PURPLE
+    val GOLD= Formatting.GOLD
+    val GRAY= Formatting.GRAY
+    val DARK_GRAY= Formatting.DARK_GRAY
+    val BLUE= Formatting.BLUE
+    val GREEN= Formatting.GREEN
+    val AQUA= Formatting.AQUA
+    val RED= Formatting.RED
+    val LIGHT_PURPLE= Formatting.LIGHT_PURPLE
+    val YELLOW= Formatting.YELLOW
+    val WHITE= Formatting.WHITE
+    val OBFUSCATED= Formatting.OBFUSCATED
+    val BOLD= Formatting.BOLD
+    val STRIKETHROUGH= Formatting.STRIKETHROUGH
+    val UNDERLINE= Formatting.UNDERLINE
+    val ITALIC= Formatting.ITALIC
+    val RESET= Formatting.RESET
+
+    operator fun Formatting.unaryPlus(): StyleBuilder = this@StyleBuilder + this
+    operator fun TextColor.unaryPlus(): StyleBuilder = this@StyleBuilder + this
+    operator fun plus(format: Formatting): StyleBuilder = format(format)
+    operator fun plus(color: TextColor): StyleBuilder = color(color)
+    
+    fun format(formatting: Formatting): StyleBuilder {
+        style = style.withFormatting(formatting)
+        return this
+    }
+
+    fun color(formatting: Formatting): StyleBuilder {
+        style = style.withColor(formatting)
+        return this
+    }
+
+    fun color(textColor: TextColor): StyleBuilder {
+        style = style.withColor(textColor)
+        return this
+    }
+
+    fun bold(): StyleBuilder {
+        style = style.withBold(true)
+        return this
+    }
+
+    fun bold(bold: Boolean): StyleBuilder {
+        style = style.withBold(bold)
+        return this
+    }
+
+    fun italic(): StyleBuilder {
+        style = style.withItalic(true)
+        return this
+    }
+
+    fun italic(italic: Boolean): StyleBuilder {
+        style = style.withItalic(italic)
+        return this
+    }
+
+    fun hoverEvent(hoverEvent: HoverEvent): StyleBuilder {
+        style = style.withHoverEvent(hoverEvent)
+        return this
+    }
+
+    fun <T> hoverEvent(action: HoverEvent.Action<T>, obj: T): StyleBuilder {
+        style = style.withHoverEvent(HoverEvent(action, obj))
+        return this
+    }
+
+    fun clickEvent(clickEvent: ClickEvent): StyleBuilder {
+        style = style.withClickEvent(clickEvent)
+        return this
+    }
+
+    fun clickEvent(action: ClickEvent.Action, string: String): StyleBuilder {
+        style = style.withClickEvent(ClickEvent(action, string))
+        return this
+    }
+
+    fun parent(parent: Style): StyleBuilder {
+        style = style.withParent(parent)
+        return this
+    }
+}
+
+inline fun styleOf(f: StyleBuilder.() -> Unit): Style {
+    val style = StyleBuilder(Style.EMPTY)
     style.f()
-    return style.value
-}
-
-fun Ref<Style>.color(formatting: Formatting) {
-    this *= this.value.withColor(formatting)
-}
-
-fun Ref<Style>.color(textColor: TextColor) {
-    this *= this.value.withColor(textColor)
-}
-
-fun Ref<Style>.bold() {
-    this *= this.value.withBold(true)
-}
-
-fun Ref<Style>.bold(bold: Boolean) {
-    this *= this.value.withBold(bold)
-}
-
-fun Ref<Style>.italic() {
-    this *= this.value.withItalic(true)
-}
-
-fun Ref<Style>.italic(italic: Boolean) {
-    this *= this.value.withItalic(italic)
-}
-
-fun Ref<Style>.hoverEvent(hoverEvent: HoverEvent) {
-    this *= this.value.withHoverEvent(hoverEvent)
-}
-
-fun <T> Ref<Style>.hoverEvent(action: HoverEvent.Action<T>, obj: T) {
-    this *= this.value.withHoverEvent(HoverEvent(action, obj))
-}
-
-fun Ref<Style>.clickEvent(clickEvent: ClickEvent) {
-    this *= this.value.withClickEvent(clickEvent)
-}
-
-fun Ref<Style>.clickEvent(action: ClickEvent.Action, string: String) {
-    this *= this.value.withClickEvent(ClickEvent(action, string))
+    return style.style
 }
