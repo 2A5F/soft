@@ -5,6 +5,5 @@ Soft API
 
 - [ ] Write doc
 - [x] Localization system
-  - [ ] Better
 - [ ] Permission system
 - [ ] Database
