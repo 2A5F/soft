@@ -7,4 +7,5 @@ Soft API
 - [x] Localization system
 - [ ] Permission system
 - [ ] Command system
+- [ ] Economic system
 - [ ] Database
