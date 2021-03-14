@@ -13,7 +13,7 @@ internal object PlayerLangInfo {
     fun get(player: ServerPlayerEntity): String {
         val r = get(player.uuid)
         if (r == null) {
-            Soft.LOGGER.warn("${Soft.logName} Can't find the language information of player ${player.entityName} ")
+            //Soft.LOGGER.warn("${Soft.logName} Can't find the language information of player ${player.entityName} ")
             return "en_us"
         }
         return r
