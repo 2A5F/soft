@@ -9,14 +9,6 @@ import net.minecraft.text.Text
 import net.minecraft.util.Util
 import java.util.*
 
-fun Packet<*>.sendTo(player: ServerPlayerEntity) {
-    player.networkHandler.sendPacket(this)
-}
-
-fun Text.intoSysMsgPack(): GameMessageS2CPacket {
-    return GameMessageS2CPacket(this, MessageType.SYSTEM, Util.NIL_UUID)
-}
-
 fun Entity.sendSysMsg(message: Text) {
     this.sendSystemMessage(message, Util.NIL_UUID)
 }
