@@ -1,5 +1,6 @@
 package co.volight.soft.impl.lang
 
+import co.volight.soft.ModId
 import co.volight.soft.Soft
 import co.volight.soft.api.lang.LangHandle
 import co.volight.soft.api.lang.LangStr
@@ -11,21 +12,20 @@ import java.nio.file.PathMatcher
 
 typealias TextName = String
 typealias LangName = String
-typealias ModName = String
 typealias LangTextMap = Map<TextName, LangStr>
 typealias LangMap = Map<LangName, LangTextMap>
-typealias ModLangMap = MutableMap<ModName, LangHandle>
+typealias ModLangMap = MutableMap<ModId, LangHandle>
 
-const val logName = "[SoftAPI:Lang]"
+internal const val logName = "[SoftAPI:Lang]"
 
-object LangImpl {
+internal object LangImpl {
     private val langs: ModLangMap = mutableMapOf()
 
-    fun get(modeName: ModName): LangHandle? {
+    fun get(modeName: ModId): LangHandle? {
         return langs[modeName]
     }
 
-    fun reg(modeName: ModName, path: String? = null): LangHandle? {
+    fun reg(modeName: ModId, path: String? = null): LangHandle? {
         val container = FabricLoader.getInstance().getModContainer(modeName).orElseThrow { throw RuntimeException("Mod \"${modeName}\" not loaded") }
         val langDir = container.getPath(path ?: "assets/${modeName}/lang/")
         return try {
@@ -40,7 +40,7 @@ object LangImpl {
         }
     }
 
-    private fun loadLangMap(modname: ModName, langDir: Path): LangMap {
+    private fun loadLangMap(modname: ModId, langDir: Path): LangMap {
         val jsonFile: PathMatcher = langDir.fileSystem.getPathMatcher("glob:**/*.json")
         return sequence {
             Files.walk(langDir).use { paths ->

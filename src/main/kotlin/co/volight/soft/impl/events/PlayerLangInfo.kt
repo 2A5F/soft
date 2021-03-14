@@ -6,7 +6,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayerEntity
 import java.util.*
 
-object PlayerLangInfo {
+internal object PlayerLangInfo {
     val playerLanguage = mutableMapOf<UUID, String>()
 
     fun get(id: UUID): String? = playerLanguage[id]

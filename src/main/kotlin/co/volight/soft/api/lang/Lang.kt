@@ -1,6 +1,7 @@
 package co.volight.soft.api.lang
 
 import co.volight.cell.Out
+import co.volight.soft.ModId
 import co.volight.soft.Soft
 import co.volight.soft.api.text.StyleBuilder
 import co.volight.soft.api.text.style
@@ -9,19 +10,18 @@ import co.volight.soft.impl.events.PlayerLangInfo
 import co.volight.soft.impl.lang.*
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.*
-import kotlin.concurrent.fixedRateTimer
 
 object Lang {
-    fun get(modName: ModName): LangHandle? {
+    fun get(modName: ModId): LangHandle? {
         return LangImpl.get(modName)
     }
 
-    fun reg(modName: ModName, path: String? = null): LangHandle? {
+    fun reg(modName: ModId, path: String? = null): LangHandle? {
         return LangImpl.reg(modName, path)
     }
 }
 
-data class LangHandle(val modname: ModName, private val map: LangMap) {
+data class LangHandle(val modname: ModId, private val map: LangMap) {
     fun getPlayerLang(player: ServerPlayerEntity): LangName {
         return PlayerLangInfo.get(player)
     }
@@ -63,7 +63,7 @@ data class LangHandle(val modname: ModName, private val map: LangMap) {
         return langText(langName, textName, map)
     }
     inline fun langText(langName: LangName, f: LangTextBuild.() -> Unit) : MutableText {
-        val build = getBuilder(langName) ?: return LiteralText("$logName The language \"${langName}\" does not exist").style { +RED }
+        val build = getBuilder(langName) ?: return LiteralText("The language \"${langName}\" does not exist").style { +RED }
         build.f()
         return build.text
     }
@@ -86,7 +86,7 @@ data class LangHandle(val modname: ModName, private val map: LangMap) {
     }
     inline fun langText(player: ServerPlayerEntity, f: LangTextBuild.() -> Unit) : MutableText {
         val langName = getPlayerLang(player)
-        val build = getBuilder(langName) ?: return LiteralText("$logName The language \"${langName}\" does not exist").style { +RED }
+        val build = getBuilder(langName) ?: return LiteralText("The language \"${langName}\" does not exist").style { +RED }
         build.f()
         return build.text
     }

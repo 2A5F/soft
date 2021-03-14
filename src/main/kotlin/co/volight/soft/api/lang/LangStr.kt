@@ -3,7 +3,6 @@ package co.volight.soft.api.lang
 import net.minecraft.text.LiteralText
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
-import java.lang.RuntimeException
 import java.lang.StringBuilder
 
 data class LangStr(val strs: List<LangStrType> = listOf()) {
@@ -18,7 +17,6 @@ data class LangStr(val strs: List<LangStrType> = listOf()) {
             when (it) {
                 is LangStrType.Str -> it.str
                 is LangStrType.Arg -> args[it.arg]?.let { it() } ?: "{{${it.arg}}}"
-                else -> throw RuntimeException("Never Branch")
             }
         }
         val str = StringBuilder()
@@ -39,7 +37,6 @@ data class LangStr(val strs: List<LangStrType> = listOf()) {
             when (it) {
                 is LangStrType.Str -> LiteralText(it.str)
                 is LangStrType.Arg -> args[it.arg]?.let { it() } ?: LiteralText("{{${it.arg}}}")
-                else -> throw RuntimeException("Never Branch")
             }
         }
         var root: MutableText = LiteralText("")
@@ -55,7 +52,7 @@ data class LangStr(val strs: List<LangStrType> = listOf()) {
     }
 }
 
-interface LangStrType {
-    data class Str(val str: String) : LangStrType
-    data class Arg(val arg: String) : LangStrType
+sealed class LangStrType {
+    data class Str(val str: String) : LangStrType()
+    data class Arg(val arg: String) : LangStrType()
 }

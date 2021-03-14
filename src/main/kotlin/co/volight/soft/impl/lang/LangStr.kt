@@ -5,7 +5,7 @@ import co.volight.soft.api.lang.LangStrType
 import co.volight.utils.subLast
 import co.volight.utils.tryGet
 
-fun parse(text: String): LangStr {
+internal fun parse(text: String): LangStr {
     val chars = text.toCharArray().toList()
     val texts = sequence { pRoot(chars) }.toList()
     return LangStr(texts)
