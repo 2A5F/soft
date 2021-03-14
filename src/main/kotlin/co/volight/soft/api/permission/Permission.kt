@@ -6,13 +6,12 @@ import java.util.*
 
 interface Permission {
     fun has(player: UUID, permission: String): Boolean
-    fun has(subject: Subject, permission: String): Boolean
+    fun has(subject: Subject, permission: String) = subject.hasPermission(permission)
 
     companion object: Permission {
         private val impl = Service.service<Permission>()
 
         override fun has(player: UUID, permission: String) = impl.get().has(player, permission)
-        override fun has(subject: Subject, permission: String) = impl.get().has(subject, permission)
     }
 }
 
